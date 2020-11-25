@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html><head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script src="assets/jquery.js"></script>
+    <script src="assets/jquery-ui.js"></script>    
+    <script type="text/javascript" src="assets/calc.js"></script>                             
+    <link href="assets/calc.css" rel="stylesheet">
+    <title>Кредитный калькулятор</title>
+    <style type="text/css"> 
+    body{ background: #ffffff; } 
+    .ui-widget-content { border-color: #A6C9E2; }
+    #calc, body { font: 90% "Trebuchet MS", sans-serif !important; }  
+    .copy { text-align: right; font-size: 10px; color: #474747; margin-right: 75px; }
+    .copy a { color: #008CEE; }
+    .controls { overflow: hidden; }
+    .year { display: block; margin: 5px; font-weight: normal; clear: both; width: 90px; margin: 5px 0 0 75px; border-radius: 5px 0 0 5px; background: #fff; padding: 3px; font-size: 12px; }
+    .active { border: 1px solid #E17009; background: #fff; color: #E17009; border-color: #E17009; }
+    .calcdata { position: relative; z-index: 2; }
+    #show_full { margin: 0 0 10px 0; text-decoration: none; } 
+    .year:hover , #show_full:hover { color: #E17009;  }
+    .message { color: #565656; }
+    table.calcdata thead td { font-size: 12px; color: #2E6E9E;  }
+    .ui-tooltip { font-size: 11px; color: #565656; }
+    .tool { text-decoration: none; color: #565656; }
+    #calc .it { margin: 13px 0 0 -40px; } 
+    </style>                                    
+</head>
+<body>
+
+<div id="calc"> 
+    <div class="controls">
+        <div class="message">
+            <a class="tool" href="#" title="Сумма которую вы хотели бы взять в кредит">Сумма кредита</a>
+        </div>
+
+        <div class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" id="amount_slider">
+            <div style="width: 16.388%;" class="ui-slider-range ui-widget-header ui-slider-range-min"></div>
+            <a style="left: 16.388%;" class="ui-slider-handle ui-state-default ui-corner-all" href="#"></a>
+        </div>  
+        <input value="500000" id="amount" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" type="text"><span class="it">руб.</span>
+        <div class="clear"></div> 
+        
+        <div class="message">
+            <a class="tool" href="#" title="Оптимальная процентная ставка около 10 - 15 % годовых">Процентная ставка в год</a>
+        </div>
+        <div class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" id="interest_slider">
+            <div style="width: 38.7755%;" class="ui-slider-range ui-widget-header ui-slider-range-min"></div>
+            <a style="left: 38.7755%;" class="ui-slider-handle ui-state-default ui-corner-all" href="#"></a>
+        </div>
+
+        <input value="20" id="interest" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" type="text"><span class="it">%</span>
+        <div class="clear"></div> 
+        
+        <div class="message">
+            <a class="tool" href="#" title="Наш калькулятор поможет рассчитать вам кредит от 1 до 5 лет">Срок</a>
+        </div>
+
+        <div class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" id="time_slider">
+            <div style="width: 47.4576%;" class="ui-slider-range ui-widget-header ui-slider-range-min"></div>
+            <a style="left: 47.4576%;" class="ui-slider-handle ui-state-default ui-corner-all" href="#"></a>
+        </div>
+        <input value="29" id="time" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" type="text"><span class="it">мес.</span>
+        <div class="clear"></div>
+        
+        <div class="message">
+            <a class="tool" href="#" title="Вы можете рассчитать свой кредит с учетом первого платежа">Первый платеж</a>
+        </div>
+
+        <div class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" id="fpay_slider">
+            <div style="width: 0%;" class="ui-slider-range ui-widget-header ui-slider-range-min">
+            </div><a style="left: 0%;" class="ui-slider-handle ui-state-default ui-corner-all" href="#"></a>
+        </div>
+        <input value="0" id="fpay" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" type="text"><span class="it">руб.</span>
+        <div class="clear"></div>
+        
+<!--         <div class="message">
+            <a class="tool" href="#" title="Существует 2 вида платежей: аннуитетные - выплаты устанавливаются периодически равными суммами через равные промежутки времени; дифференцированные - выплачивают равными долями, а процентные платежи меняются от максимума в начале, до минимума в конце">Тип платежей</a>
+        </div>
+        <div class="labels">    
+            <input name="ptype" value="annuitet" type="hidden" checked>
+        </div> -->
+        <div class="clear"></div>    
+    </div>
+    <div class="message">Краткое описание</div>
+
+    <div id="info"><table class="short calcdata ui-styled-table"><tbody><tr><td class="ui-widget-content">Ежемесячный платеж</td><td class="ui-widget-content">25574.71 ... 17528.74</td></tr><tr class="last-child"><td class="ui-widget-content">Переплата по процентам</td><td class="ui-widget-content">125000.00</td></tr></tbody></table></div>                  
+    <div class="clear"></div> 
+    
+    <div class="message">График платежей<a href="#" id="show_full">Показать полный ▼</a>
+<!--     <div id="years"><a href="#" class="year ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" id="1">1-ый год</a><a href="#" class="year ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" id="2">2-ой год</a><a href="#" class="year ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" id="3">3-ий год</a></div> -->
+    </div>
+    <div style="overflow: hidden; height: 215px;" id="result">
+    </div>
+    <div class="bg"></div>                  
+    <div class="clear"></div> 
+    <div class="message"></div>
+    <div id="result_last"><!-- <div style="text-align:center;">...</div><table class="short calcdata ui-styled-table"><tbody><tr class="last-child"><td class="ui-widget-content">29</td><td class="ui-widget-content">17528.74</td><td class="ui-widget-content">287.36</td><td class="ui-widget-content">17241.38</td><td class="ui-widget-content">0</td></tr></tbody></table> --></div>
+    <div class="clear"></div> 
+</div>
+
+
+
+
+
+
+
+</body></html>
